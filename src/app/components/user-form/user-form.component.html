@@ -1,0 +1,52 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>New Team Member</h2>
+      <button class="close-btn" (click)="onClose()">&times;</button>
+    </div>
+    
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input 
+          id="name" 
+          type="text" 
+          formControlName="name" 
+          placeholder="e.g. Gulchetan Singh"
+        />
+        <div class="error" *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched">
+          Please enter a name (at least 2 characters)
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input 
+          id="email" 
+          type="email" 
+          formControlName="email" 
+          placeholder="gulchetansingh2002@gmail.com"
+        />
+        <div class="error" *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched">
+          Please enter a valid email
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="role">Access Level</label>
+        <select id="role" formControlName="role">
+          <option value="">Choose a role</option>
+          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+        </select>
+        <div class="error" *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched">
+          Please select a role
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="onClose()">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="userForm.invalid">Add User</button>
+      </div>
+    </form>
+  </div>
+</div>

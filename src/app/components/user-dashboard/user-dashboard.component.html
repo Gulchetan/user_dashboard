@@ -1,0 +1,93 @@
+<div class="dashboard-container">
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="dashboard-header">
+    <h1>Team Members</h1>
+    <button class="btn-add-user" (click)="openModal()">Add User</button>
+  </div>
+
+  <div class="dashboard-content">
+    <div class="table-section">
+      <h2>All Users ({{ filteredUsers.length }})</h2>
+      
+      <div class="filters">
+        <input 
+          type="text" 
+          class="search-input" 
+          placeholder="Find someone..." 
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+        />
+        <select 
+          class="role-filter" 
+          [(ngModel)]="selectedRole"
+          (ngModelChange)="onRoleFilterChange()"
+        >
+          <option value="">All Roles</option>
+          <option value="Admin">Admin</option>
+          <option value="Editor">Editor</option>
+          <option value="Viewer">Viewer</option>
+        </select>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of paginatedUsers" class="table-row-fade">
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                <span class="role-badge" [class]="'role-' + user.role.toLowerCase()">
+                  {{ user.role }}
+                </span>
+              </td>
+            </tr>
+            <tr *ngIf="paginatedUsers.length === 0">
+              <td colspan="3" class="no-data">Nobody here yet</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="totalPages > 1">
+        <button 
+          class="pagination-btn" 
+          (click)="previousPage()" 
+          [disabled]="currentPage === 1"
+        >
+          Previous
+        </button>
+        <span class="page-info">
+          Page {{ currentPage }} of {{ totalPages }}
+        </span>
+        <button 
+          class="pagination-btn" 
+          (click)="nextPage()" 
+          [disabled]="currentPage === totalPages"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+
+    <div class="chart-section">
+      <h2>Role Distribution</h2>
+      <div class="chart-container">
+        <canvas #chartCanvas></canvas>
+      </div>
+    </div>
+  </div>
+
+  <ng-container #modalContainer></ng-container>
+</div>
